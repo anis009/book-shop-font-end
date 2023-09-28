@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../redux/features/user/userSlice";
+import { toast } from "react-hot-toast";
 type LoginFormInputs = {
 	email: string;
 	password: string;
@@ -15,12 +16,19 @@ function Login() {
 		formState: { errors },
 	} = useForm<LoginFormInputs>();
 	const dispatch = useAppDispatch();
-	const { user, isLoading } = useAppSelector((state) => state.user);
+	const { user, isLoading, isError, error } = useAppSelector(
+		(state) => state.user
+	);
 	const navigate = useNavigate();
 
 	const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
 		console.log("Submitted Data:", data);
 		dispatch(loginUser({ email: data.email, password: data.password }));
+
+		if (isError && error) {
+			console.log(error, { isError });
+			toast.error(error);
+		}
 	};
 
 	React.useEffect(() => {

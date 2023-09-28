@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { createUser } from "../../redux/features/user/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import react from "react";
+import { toast } from "react-hot-toast";
 type SignupFormInputs = {
 	email: string;
 	password: string;
@@ -16,13 +17,17 @@ function Signup() {
 	} = useForm<SignupFormInputs>();
 
 	const dispatch = useAppDispatch();
-	const { user, isLoading } = useAppSelector((state) => state.user);
+	const { user, isLoading, error, isError } = useAppSelector(
+		(state) => state.user
+	);
 	const navigate = useNavigate();
 	const onSubmit: SubmitHandler<SignupFormInputs> = (data) => {
 		console.log("Submitted Data:", data);
 		dispatch(createUser({ email: data.email, password: data.password }));
-		if (isLoading && user?.email) {
-			navigate("/");
+
+		if (isError && error) {
+			console.log(error, { isError });
+			toast.error(error);
 		}
 	};
 
@@ -32,7 +37,7 @@ function Signup() {
 		}
 	}, [isLoading, navigate, user?.email]);
 
-	console.log(user, isLoading);
+	//	console.log(user, isLoading);
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
