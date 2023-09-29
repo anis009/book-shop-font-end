@@ -1,15 +1,13 @@
-import React from "react";
-import { useGetLatestBooksQuery } from "../../redux/features/book/bookApi";
-import { IIBook } from "../../redux/features/book/bookSlice";
 import Book from "../../components/Book/Book";
 import Loading from "../../components/Loading/Loading";
+import { useGetBooksQuery } from "../../redux/features/book/bookApi";
+import { IIBook } from "../../redux/features/book/bookSlice";
 
-const Home = () => {
-	const { data, isLoading } = useGetLatestBooksQuery(undefined);
+const AllBooks = () => {
+	const { data, isLoading } = useGetBooksQuery(undefined);
 	console.log(data);
 	return (
-		<div className="container  mx-auto my-5">
-			<h1 className="text-2xl font-semibold mb-5">Recent Books</h1>
+		<div className="p-5">
 			{isLoading ? (
 				<Loading />
 			) : (
@@ -23,4 +21,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default AllBooks;

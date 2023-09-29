@@ -1,10 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { IReview } from "./interfaces";
 
 export interface IIBook {
 	title: string;
 	author: string;
 	publicationDate: string;
 	genre: string;
+	_id?: string;
+	reviews: IReview[];
 }
 interface IBook {
 	books: IIBook[];

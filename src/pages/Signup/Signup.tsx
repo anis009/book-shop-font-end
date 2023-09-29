@@ -24,16 +24,16 @@ function Signup() {
 	const onSubmit: SubmitHandler<SignupFormInputs> = (data) => {
 		console.log("Submitted Data:", data);
 		dispatch(createUser({ email: data.email, password: data.password }));
-
-		if (isError && error) {
-			console.log(error, { isError });
-			toast.error(error);
-		}
 	};
 
 	react.useEffect(() => {
 		if (isLoading && user?.email) {
 			navigate("/");
+		}
+
+		if (isError && error) {
+			console.log(error, { isError });
+			toast.error(error);
 		}
 	}, [isLoading, navigate, user?.email]);
 

@@ -19,11 +19,11 @@ const Navbar = () => {
 
 	let navLinks: INavItem[] = [
 		{
-			id: "home",
+			id: "",
 			title: "Home",
 		},
 		{
-			id: "allbooks",
+			id: "books",
 			title: "All Books",
 		},
 	];
@@ -43,6 +43,10 @@ const Navbar = () => {
 	} else {
 		navLinks = [
 			...navLinks,
+			{
+				id: "add-new-book",
+				title: "Add New",
+			},
 			{
 				id: "profile",
 				title: "Profile",
@@ -65,7 +69,6 @@ const Navbar = () => {
 
 	return (
 		<nav className="w-full flex py-6 justify-between items-center shadow-2xl bg-purple-950 navbar px-5">
-			{/* Logo */}
 			<h1 className="text-3xl text-white">Book Sell</h1>
 			<div className="relative ml-5">
 				<input
