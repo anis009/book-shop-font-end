@@ -3,7 +3,8 @@ import { api } from "../../api/apiSlice";
 const bookApi = api.injectEndpoints({
 	endpoints: (builder) => ({
 		getBooks: builder.query({
-			query: () => "/books",
+			query: (searchTerm) =>
+				`/books?searchTerm=${searchTerm ? searchTerm : ""}`,
 		}),
 		getLatestBooks: builder.query({
 			query: () => "/books/latest",
@@ -39,6 +40,13 @@ const bookApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ["books"], // Use the same tag description as in other queries/mutations
 		}),
+		deleteBook: builder.mutation({
+			query: (id) => ({
+				url: `/books/${id}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: ["books"], // Use the same tag description as in other queries/mutations
+		}),
 	}),
 });
 
@@ -50,4 +58,5 @@ export const {
 	useGetLatestBooksQuery,
 	useCreateCommentMutation,
 	useUpdateBookMutation,
+	useDeleteBookMutation,
 } = bookApi;

@@ -2,7 +2,7 @@ import { IIBook } from "../../redux/features/book/bookSlice";
 import { useNavigate } from "react-router-dom";
 
 const Book = ({ book }: { book: IIBook }) => {
-	console.log(book);
+	// console.log(book);
 	const navigate = useNavigate();
 
 	const bookDetails = () => {

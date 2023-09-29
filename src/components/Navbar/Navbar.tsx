@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { signOut } from "firebase/auth";
+import { toast } from "react-hot-toast";
 import auth from "../../lib/firebase";
 import { setUser } from "../../redux/features/user/userSlice";
 interface INavItem {
@@ -13,7 +14,9 @@ interface INavItem {
 const Navbar = () => {
 	const [active, setActive] = useState("Home");
 	const [toggle, setToggle] = useState(false);
+	const [search, setSearch] = useState("");
 	const { user } = useAppSelector((state) => state.user);
+	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 	console.log(user);
 
@@ -67,16 +70,25 @@ const Navbar = () => {
 			});
 	};
 
+	const searchHandler = () => {
+		navigate(`/books?searchTerm=${search}`);
+	};
+
 	return (
 		<nav className="w-full flex py-6 justify-between items-center shadow-2xl bg-purple-950 navbar px-5">
 			<h1 className="text-3xl text-white">Book Sell</h1>
-			<div className="relative ml-5">
+			<div className="relative mx-5">
 				<input
 					type="text"
 					placeholder="Search..."
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
 					className="sm:w-[400px] w-[200px] px-2 py-2 indent-2 rounded-full border outline-none border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
 				/>
-				<div className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+				<div
+					onClick={searchHandler}
+					className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+				>
 					<svg
 						className="w-5 h-5 text-gray-400"
 						xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import {
 	useCreateCommentMutation,
+	useDeleteBookMutation,
 	useGetSingleBookQuery,
 } from "../../redux/features/book/bookApi";
 import Loading from "../../components/Loading/Loading";
@@ -19,6 +20,14 @@ const BookDetails = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const { data, isLoading, refetch } = useGetSingleBookQuery(id);
+	const [
+		deleteBookMutation,
+		{
+			isSuccess: deleteSuccess,
+			isError: deleteError,
+			isLoading: deleteLoading,
+		},
+	] = useDeleteBookMutation();
 	useEffect(() => {
 		refetch();
 	}, [refetch]);
@@ -28,6 +37,8 @@ const BookDetails = () => {
 		{ isLoading: commentLoading, data: comment, isSuccess, isError, error },
 	] = useCreateCommentMutation(undefined);
 	console.log(data);
+
+	//?for add review
 	useEffect(() => {
 		if (isSuccess) {
 			console.log(comment);
@@ -41,7 +52,18 @@ const BookDetails = () => {
 			console.log(error);
 			toast.error("Add review failed");
 		}
-	}, [comment, error, isError, isSuccess]);
+	}, [comment, error, isError, isSuccess, refetch]);
+
+	// ? for deleting book
+	useEffect(() => {
+		if (deleteSuccess) {
+			toast.success("Delete successfully");
+			navigate("/books");
+		} else if (deleteError) {
+			console.log(error);
+			toast.error("Delete failed");
+		}
+	}, [deleteError, deleteSuccess, error, navigate]);
 
 	if (isLoading) {
 		return <Loading />;
@@ -60,6 +82,10 @@ const BookDetails = () => {
 	//! add review
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		if (!user?.email) {
+			toast.error("Please,Log In");
+			return;
+		}
 		// Handle form submission (e.g., send data to the server)
 		console.log("Form data submitted:", formData);
 		createCommentMutation({
@@ -70,7 +96,14 @@ const BookDetails = () => {
 		});
 	};
 
-	const deleteBook = () => {};
+	const deleteBook = () => {
+		const flag = window.confirm("Are sure you want to delete");
+		if (!flag) {
+			return;
+		}
+		deleteBookMutation(id);
+	};
+
 	const editBook = () => {
 		navigate(`/edit-book/${id}`);
 	};
@@ -132,10 +165,11 @@ const BookDetails = () => {
 					Edit
 				</button>
 				<button
+					disabled={deleteLoading}
 					onClick={deleteBook}
 					className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
 				>
-					Delete
+					{deleteLoading ? "Deleting.." : "Delete"}
 				</button>
 			</div>
 		</div>

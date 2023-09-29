@@ -1,4 +1,3 @@
-import React from "react";
 import { useGetLatestBooksQuery } from "../../redux/features/book/bookApi";
 import { IIBook } from "../../redux/features/book/bookSlice";
 import Book from "../../components/Book/Book";
